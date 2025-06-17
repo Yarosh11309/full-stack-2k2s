@@ -1,0 +1,24 @@
+{% extends layout.html %}
+
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+<h2>Notes</h2>
+<a href="/notes/create">Add note</a>
+<form method="get" action="/notes">
+    <input type="text" name="q" placeholder="search" value="{{ $filters['q'] }}">
+    <input type="text" name="tag" placeholder="tag" value="{{ $filters['tag'] }}">
+    <input type="text" name="color" placeholder="color" value="{{ $filters['color'] }}">
+    <button type="submit">Filter</button>
+</form>
+<ul>
+{% foreach ($notes as $note) { %}
+    <li style="border-left: 4px solid {{ $note->getColor() }}; margin:5px; padding:5px;">
+        <strong>{{ $note->getTitle() }}</strong> - {{ $note->getDescription() }}<br>
+        <small>Tags: {{ $note->getTags() }} | Created: {{ $note->getCreatedAt() }}</small><br>
+        <a href="/notes/edit?id={{ $note->getId() }}">Edit</a>
+        <a href="/notes/delete?id={{ $note->getId() }}">Delete</a>
+    </li>
+{% } %}
+</ul>
+{% endblock %}

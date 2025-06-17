@@ -8,7 +8,12 @@ class Request
 {
     public function getUri(): string
     {
-        return $_SERVER["REQUEST_URI"];
+        $uri = $_SERVER["REQUEST_URI"] ?? '/';
+        $pos = strpos($uri, '?');
+        if ($pos !== false) {
+            $uri = substr($uri, 0, $pos);
+        }
+        return $uri;
     }
 
     public function getMethod(): MethodEnum

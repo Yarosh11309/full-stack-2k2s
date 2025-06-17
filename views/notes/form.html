@@ -1,0 +1,19 @@
+{% extends layout.html %}
+
+{% block title %}Note{% endblock %}
+
+{% block content %}
+<h2>{% if ($is_edit) { %}Edit{% } else { %}Create{% } %} Note</h2>
+<form method="post" action="{{ $action }}">
+    <input type="hidden" name="id" value="{{ $note_id }}">
+    <label>Title</label><br>
+    <input type="text" name="title" value="{{ $title }}"><br>
+    <label>Description</label><br>
+    <textarea name="description">{{ $description }}</textarea><br>
+    <label>Color</label><br>
+    <input type="text" name="color" value="{{ $color }}"><br>
+    <label>Tags</label><br>
+    <input type="text" name="tags" value="{{ $tags }}"><br>
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

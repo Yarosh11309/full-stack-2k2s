@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use app\controllers\PresentationController;
+use app\controllers\NoteController;
 use app\core\Application;
 use app\core\ConfigParser;
 
@@ -26,8 +27,19 @@ $application = new Application();
 
 $router = $application->getRouter();
 
-$router->setGetRoute("/", [new PresentationController(), "getView"]);
-$router->setPostRoute("/handle", [new PresentationController(), "handleView"]);
+$presentation = new PresentationController();
+$notes = new NoteController();
+
+$router->setGetRoute("/", [$notes, "index"]);
+$router->setGetRoute("/notes", [$notes, "index"]);
+$router->setGetRoute("/notes/create", [$notes, "createView"]);
+$router->setPostRoute("/notes/create", [$notes, "create"]);
+$router->setGetRoute("/notes/edit", [$notes, "editView"]);
+$router->setPostRoute("/notes/edit", [$notes, "edit"]);
+$router->setGetRoute("/notes/delete", [$notes, "delete"]);
+
+$router->setGetRoute("/presentation", [$presentation, "getView"]);
+$router->setPostRoute("/handle", [$presentation, "handleView"]);
 $router->setGetRoute("/error", "");
 
 ob_start();
