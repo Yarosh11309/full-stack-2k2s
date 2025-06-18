@@ -47,6 +47,11 @@ class Application
         return $this->request;
     }
 
+    public function getResponse(): Response
+    {
+        return $this->response;
+    }
+
     public function getRouter(): Router
     {
         return $this->router;
