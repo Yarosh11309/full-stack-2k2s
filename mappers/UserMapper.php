@@ -87,7 +87,7 @@ class UserMapper extends \app\core\Mapper
        $this->delete->execute([":id"=>$model->getId()]);
     }
 
-    protected function doSelect(int $id): array
+    public function doSelect(int $id): array
     {
         $this->select->execute([":id"=>$id]);
        return $this->select->fetch(\PDO::FETCH_NAMED);
