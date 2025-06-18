@@ -8,6 +8,7 @@ use app\core\Model;
 
 class Note extends Model
 {
+    private int $user_id;
     private string $title;
     private string $description;
     private string $color;
@@ -16,6 +17,7 @@ class Note extends Model
     private string $updated_at;
 
     public function __construct(?int $id,
+                                int $user_id,
                                 string $title,
                                 string $description,
                                 string $color,
@@ -24,12 +26,23 @@ class Note extends Model
                                 string $updated_at = '')
     {
         parent::__construct($id);
+        $this->user_id = $user_id;
         $this->title = $title;
         $this->description = $description;
         $this->color = $color;
         $this->tags = $tags;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(int $user_id): void
+    {
+        $this->user_id = $user_id;
     }
 
     public function getTitle(): string

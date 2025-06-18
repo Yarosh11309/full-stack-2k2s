@@ -10,6 +10,16 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
         <a class="navbar-brand" href="/notes">Notes App</a>
+        {% $u = \app\core\Application::$app->getUser(); %}
+        <div class="d-flex ms-auto">
+        {% if ($u) { %}
+            <span class="navbar-text me-2">{{ $u->getLogin() }}</span>
+            <a class="btn btn-outline-light" href="/logout">Logout</a>
+        {% } else { %}
+            <a class="btn btn-outline-light me-2" href="/login">Login</a>
+            <a class="btn btn-outline-light" href="/register">Register</a>
+        {% } %}
+        </div>
     </div>
 </nav>
 <div class="container mb-5">

@@ -17,13 +17,25 @@ class NoteController
         $this->mapper = new NoteMapper();
     }
 
+    private function requireLogin(): ?\app\models\AuthUser
+    {
+        $user = Application::$app->getUser();
+        if (!$user) {
+            header('Location: /login');
+            exit;
+        }
+        $this->mapper->setUserId($user->getId());
+        return $user;
+    }
+
     public function index(): void
     {
+        $user = $this->requireLogin();
         $body = Application::$app->getRequest()->getBody();
         $query = $body['q'] ?? null;
         $tag = $body['tag'] ?? null;
         $color = $body['color'] ?? null;
-        $rows = $this->mapper->filter($query, $tag, $color);
+        $rows = $this->mapper->filter($user->getId(), $query, $tag, $color);
         $notes = array_map(fn($row) => $this->mapper->createObject($row), $rows);
         Application::$app->getRouter()->renderTemplate('notes/index', [
             'notes' => $notes,
@@ -33,6 +45,7 @@ class NoteController
 
     public function createView(): void
     {
+        $this->requireLogin();
         Application::$app->getRouter()->renderTemplate('notes/form', [
             'action' => '/notes/create',
             'title' => '',
@@ -46,9 +59,11 @@ class NoteController
 
     public function create(): void
     {
+        $user = $this->requireLogin();
         $body = Application::$app->getRequest()->getBody();
         $note = new Note(
             id: null,
+            user_id: $user->getId(),
             title: $body['title'] ?? '',
             description: $body['description'] ?? '',
             color: $body['color'] ?? '',
@@ -60,6 +75,7 @@ class NoteController
 
     public function editView(): void
     {
+        $user = $this->requireLogin();
         $body = Application::$app->getRequest()->getBody();
         if (!isset($body['id'])) {
             Application::$app->getRouter()->renderStatic('404.html');
@@ -85,6 +101,7 @@ class NoteController
 
     public function edit(): void
     {
+        $user = $this->requireLogin();
         $body = Application::$app->getRequest()->getBody();
         if (!isset($body['id'])) {
             Application::$app->getRouter()->renderStatic('404.html');
@@ -92,6 +109,7 @@ class NoteController
         }
         $note = new Note(
             id: (int)$body['id'],
+            user_id: $user->getId(),
             title: $body['title'] ?? '',
             description: $body['description'] ?? '',
             color: $body['color'] ?? '',
@@ -103,9 +121,10 @@ class NoteController
 
     public function delete(): void
     {
+        $user = $this->requireLogin();
         $body = Application::$app->getRequest()->getBody();
         if (isset($body['id'])) {
-            $note = new Note((int)$body['id'], '', '', '', '');
+            $note = new Note((int)$body['id'], $user->getId(), '', '', '', '');
             $this->mapper->Delete($note);
         }
         Application::$app->getRouter()->renderTemplate('notes/success', []);
