@@ -27,12 +27,14 @@ class AuthController
         $body = Application::$app->getRequest()->getBody();
         $login = $body['login'] ?? '';
         $password = $body['password'] ?? '';
-        if ($login === '' || $password === '') {
+        $first = $body['first_name'] ?? '';
+        $second = $body['second_name'] ?? '';
+        if ($login === '' || $password === '' || $first === '' || $second === '') {
             Application::$app->getRouter()->renderTemplate('auth/register', ['error' => 'Fill all fields']);
             return;
         }
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $user = new AuthUser(null, $login, $hash);
+        $user = new AuthUser(null, $login, $hash, $first, $second);
         $this->mapper->Insert($user);
         Application::$app->login($user);
         header('Location: /notes');

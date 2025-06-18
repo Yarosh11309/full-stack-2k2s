@@ -18,7 +18,8 @@ class AuthMapper extends Mapper
     {
         parent::__construct();
         $this->insert = $this->getPdo()->prepare(
-            "INSERT INTO users (login, password) VALUES (:login, :password)"
+            "INSERT INTO users (login, password, first_name, second_name) " .
+            "VALUES (:login, :password, :first_name, :second_name)"
         );
         $this->select = $this->getPdo()->prepare("SELECT * FROM users WHERE id = :id");
         $this->selectByLogin = $this->getPdo()->prepare("SELECT * FROM users WHERE login = :login");
@@ -30,6 +31,8 @@ class AuthMapper extends Mapper
         $this->insert->execute([
             ':login' => $model->getLogin(),
             ':password' => $model->getPassword(),
+            ':first_name' => $model->getFirstName(),
+            ':second_name' => $model->getSecondName(),
         ]);
         $model->setId((int)$this->getPdo()->lastInsertId());
         return $model;
@@ -66,7 +69,9 @@ class AuthMapper extends Mapper
         return new AuthUser(
             id: $data['id'] ?? null,
             login: $data['login'] ?? '',
-            password: $data['password'] ?? ''
+            password: $data['password'] ?? '',
+            first_name: $data['first_name'] ?? '',
+            second_name: $data['second_name'] ?? ''
         );
     }
 
