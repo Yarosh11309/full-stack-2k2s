@@ -38,6 +38,7 @@ class AuthController
         $this->mapper->Insert($user);
         Application::$app->login($user);
         header('Location: /notes');
+        exit;
     }
 
     public function loginView(): void
@@ -57,11 +58,13 @@ class AuthController
         }
         Application::$app->login($user);
         header('Location: /notes');
+        exit;
     }
 
     public function logout(): void
     {
         Application::$app->logout();
         header('Location: /login');
+        exit;
     }
 }
