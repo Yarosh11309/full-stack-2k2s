@@ -17,7 +17,7 @@ class NoteController
         $this->mapper = new NoteMapper();
     }
 
-    public function index()
+    public function index(): void
     {
         $body = Application::$app->getRequest()->getBody();
         $query = $body['q'] ?? null;
@@ -31,7 +31,7 @@ class NoteController
         ]);
     }
 
-    public function createView()
+    public function createView(): void
     {
         Application::$app->getRouter()->renderTemplate('notes/form', [
             'action' => '/notes/create',
@@ -44,7 +44,7 @@ class NoteController
         ]);
     }
 
-    public function create()
+    public function create(): void
     {
         $body = Application::$app->getRequest()->getBody();
         $note = new Note(
@@ -58,7 +58,7 @@ class NoteController
         Application::$app->getRouter()->renderTemplate('notes/success', []);
     }
 
-    public function editView()
+    public function editView(): void
     {
         $body = Application::$app->getRequest()->getBody();
         if (!isset($body['id'])) {
@@ -83,7 +83,7 @@ class NoteController
         ]);
     }
 
-    public function edit()
+    public function edit(): void
     {
         $body = Application::$app->getRequest()->getBody();
         if (!isset($body['id'])) {
@@ -101,7 +101,7 @@ class NoteController
         Application::$app->getRouter()->renderTemplate('notes/success', []);
     }
 
-    public function delete()
+    public function delete(): void
     {
         $body = Application::$app->getRequest()->getBody();
         if (isset($body['id'])) {
