@@ -37,8 +37,7 @@ class AuthController
         $user = new AuthUser(null, $login, $hash, $first, $second);
         $this->mapper->Insert($user);
         Application::$app->login($user);
-        header('Location: /notes');
-        exit;
+        Application::$app->getResponse()->redirect('/notes');
     }
 
     public function loginView(): void
@@ -57,14 +56,12 @@ class AuthController
             return;
         }
         Application::$app->login($user);
-        header('Location: /notes');
-        exit;
+        Application::$app->getResponse()->redirect('/notes');
     }
 
     public function logout(): void
     {
         Application::$app->logout();
-        header('Location: /login');
-        exit;
+        Application::$app->getResponse()->redirect('/login');
     }
 }

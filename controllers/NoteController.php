@@ -21,8 +21,7 @@ class NoteController
     {
         $user = Application::$app->getUser();
         if (!$user) {
-            header('Location: /login');
-            exit;
+            Application::$app->getResponse()->redirect('/login');
         }
         $this->mapper->setUserId($user->getId());
         return $user;
