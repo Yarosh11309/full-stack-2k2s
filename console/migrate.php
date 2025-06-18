@@ -11,7 +11,7 @@ chdir(PROJECT_ROOT);
 
 require PROJECT_ROOT . "vendor/autoload.php";
 
-include 'migrations\AllMigrations.php';
+include PROJECT_ROOT . 'migrations/AllMigrations.php';
 $migrations = getMigrations();
 echo sprintf("%s migrations found%s", count($migrations), PHP_EOL);
 
