@@ -41,7 +41,7 @@ abstract class Mapper
 
     protected abstract function doDelete(Model $model);
 
-    protected abstract function doSelect(int $id): array;
+    abstract public function doSelect(int $id): array;
 
     protected abstract function doSelectAll(): array;
 

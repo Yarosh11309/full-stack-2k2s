@@ -1,0 +1,41 @@
+{% extends layout.html %}
+
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Notes</h2>
+    <a class="btn btn-primary" href="/notes/create">Add note</a>
+</div>
+
+<form class="row g-2 mb-4" method="get" action="/notes">
+    <div class="col-md-4">
+        <input class="form-control" type="text" name="q" placeholder="search" value="{{ $filters['q'] }}">
+    </div>
+    <div class="col-md-3">
+        <input class="form-control" type="text" name="tag" placeholder="tag" value="{{ $filters['tag'] }}">
+    </div>
+    <div class="col-md-3">
+        <input class="form-control" type="text" name="color" placeholder="color" value="{{ $filters['color'] }}">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-secondary w-100" type="submit">Filter</button>
+    </div>
+</form>
+
+<div class="row row-cols-1 g-3">
+{% foreach ($notes as $note) { %}
+    <div class="col">
+        <div class="card" style="border-left: 6px solid {{ $note->getColor() }};">
+            <div class="card-body">
+                <h5 class="card-title">{{ $note->getTitle() }}</h5>
+                <p class="card-text">{{ $note->getDescription() }}</p>
+                <p class="card-text"><small class="text-muted">Tags: {{ $note->getTags() }} | Created: {{ $note->getCreatedAt() }}</small></p>
+                <a class="btn btn-sm btn-outline-primary" href="/notes/edit?id={{ $note->getId() }}">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" href="/notes/delete?id={{ $note->getId() }}">Delete</a>
+            </div>
+        </div>
+    </div>
+{% } %}
+</div>
+{% endblock %}
