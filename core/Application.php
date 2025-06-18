@@ -12,15 +12,22 @@ class Application
     private Router $router;
     private Logger $logger;
     private Database $database;
+    private ?\app\models\AuthUser $user = null;
 
     public function __construct()
     {
         self::$app = $this;
+        session_start();
         $this->logger = new Logger(sprintf("%sruntime/%s", PROJECT_ROOT, $_ENV["APP_LOG"]));
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
         $this->database = new Database(getenv("DB_DSN"), getenv("DB_USER"), getenv("DB_PASSWORD"));
+
+        if (isset($_SESSION['user_id'])) {
+            $mapper = new \app\mappers\AuthMapper();
+            $this->user = $mapper->Select((int)$_SESSION['user_id']);
+        }
 
     }
 
@@ -38,6 +45,11 @@ class Application
     public function getRequest(): Request
     {
         return $this->request;
+    }
+
+    public function getResponse(): Response
+    {
+        return $this->response;
     }
 
     public function getRouter(): Router
@@ -59,5 +71,22 @@ class Application
     public function getDatabase(): Database
     {
         return $this->database;
+    }
+
+    public function login(\app\models\AuthUser $user): void
+    {
+        $_SESSION['user_id'] = $user->getId();
+        $this->user = $user;
+    }
+
+    public function logout(): void
+    {
+        unset($_SESSION['user_id']);
+        $this->user = null;
+    }
+
+    public function getUser(): ?\app\models\AuthUser
+    {
+        return $this->user;
     }
 }

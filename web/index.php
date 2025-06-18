@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use app\controllers\PresentationController;
 use app\controllers\NoteController;
+use app\controllers\AuthController;
 use app\core\Application;
 use app\core\ConfigParser;
 
@@ -29,6 +30,7 @@ $router = $application->getRouter();
 
 $presentation = new PresentationController();
 $notes = new NoteController();
+$auth = new AuthController();
 
 $router->setGetRoute("/", [$notes, "index"]);
 $router->setGetRoute("/notes", [$notes, "index"]);
@@ -37,6 +39,12 @@ $router->setPostRoute("/notes/create", [$notes, "create"]);
 $router->setGetRoute("/notes/edit", [$notes, "editView"]);
 $router->setPostRoute("/notes/edit", [$notes, "edit"]);
 $router->setGetRoute("/notes/delete", [$notes, "delete"]);
+
+$router->setGetRoute("/login", [$auth, "loginView"]);
+$router->setPostRoute("/login", [$auth, "login"]);
+$router->setGetRoute("/register", [$auth, "registerView"]);
+$router->setPostRoute("/register", [$auth, "register"]);
+$router->setGetRoute("/logout", [$auth, "logout"]);
 
 $router->setGetRoute("/presentation", [$presentation, "getView"]);
 $router->setPostRoute("/handle", [$presentation, "handleView"]);
