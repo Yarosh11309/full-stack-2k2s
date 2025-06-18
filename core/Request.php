@@ -13,6 +13,10 @@ class Request
         if ($pos !== false) {
             $uri = substr($uri, 0, $pos);
         }
+        $uri = rtrim($uri, '/');
+        if ($uri === '') {
+            $uri = '/';
+        }
         return $uri;
     }
 
